@@ -97,8 +97,7 @@ frappe.ui.form.on("Supplier Quotation", {
 
         frm.set_query("supplier", () => ({
             filters: {
-                is_transporter: 0,
-                custom_is_party: 0,
+                is_transporter: 0
             },
         }));
     },
