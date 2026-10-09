@@ -82,7 +82,7 @@ app_license = "mit"
 # Installation
 # ------------
 
-# before_install = "broker_app.install.before_install"
+before_install = "broker_app.install.before_install"
 # after_install = "broker_app.install.after_install"
 
 # Uninstallation
