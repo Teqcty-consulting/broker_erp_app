@@ -289,6 +289,6 @@ app_include_css = [
     
 ]
 
-app_include_js = [
-    "/assets/nexity_customization/js/buying_page.js"
-]
+# "/assets/nexity_customization/js/buying_page.js" was listed here, but that file does not exist
+# in nexity_customization, so every desk page logged a 404 and a blocked-MIME script error.
+app_include_js = []
