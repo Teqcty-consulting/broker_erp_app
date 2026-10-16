@@ -458,8 +458,8 @@ def get_party_suppliers(start=0, limit=20):
 @frappe.whitelist()
 def get_party_specific_items(party=None, start=0, page_length=20):
     """
-    Fetch only the Items explicitly assigned to a Supplier via the
-    "Party Specific Item" doctype (Item / Item Group / Brand rules).
+    Fetch only the Items explicitly assigned to a broker Supplier via the
+    "Broker Item" doctype (Item / Item Group / Brand rules).
 
     A broker always gets items assigned to their own linked Supplier —
     "party" is ignored for them. Internal users (System Users) may pass
@@ -475,11 +475,18 @@ def get_party_specific_items(party=None, start=0, page_length=20):
         start = int(start)
         page_length = int(page_length)
 
-        rules = frappe.get_all(
-            "Party Specific Item",
-            filters={"party_type": "Supplier", "party": party},
-            fields=["restrict_based_on", "based_on_value"],
-        )
+        # Broker Item (our own list, from the Broker Connect app) - ERPNext's Party Specific Item
+        # would reserve these items for the supplier on every purchase document.
+        if frappe.db.exists("DocType", "Broker Item"):
+            rules = frappe.get_all(
+                "Broker Item", filters={"broker": party}, fields=["restrict_based_on", "based_on_value"]
+            )
+        else:
+            rules = frappe.get_all(
+                "Party Specific Item",
+                filters={"party_type": "Supplier", "party": party},
+                fields=["restrict_based_on", "based_on_value"],
+            )
 
         if not rules:
             return {
